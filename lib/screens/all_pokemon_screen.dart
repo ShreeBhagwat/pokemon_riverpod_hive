@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pokemon_riverpod/extensions/buildcontext_extensions.dart';
@@ -20,11 +21,7 @@ class AllPokemonScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         actions: [
-          IconButton(
-              onPressed: () {
-               
-              },
-              icon: const Icon(Icons.favorite))
+          IconButton(onPressed: () {}, icon: const Icon(Icons.favorite))
         ],
       ),
       body: GridView.builder(
@@ -67,12 +64,14 @@ class AllPokemonScreen extends ConsumerWidget {
                       ),
                       Align(
                         alignment: Alignment.bottomCenter,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Text(
-                              pokemon.name.toString(),
-                            ),
+                            Text(pokemon.name.toString(),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline6!
+                                    .copyWith(color: Colors.red, fontSize: 20)),
                           ],
                         ),
                       ),
