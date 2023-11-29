@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:pokemon_riverpod/modal/pokemon.dart';
 import 'package:pokemon_riverpod/repository/hive_repository.dart';
+import 'package:pokemon_riverpod/screens/all_pokemon_screen.dart';
 import 'package:pokemon_riverpod/screens/splash_screen.dart';
 
 void main() async {
@@ -17,7 +18,7 @@ class PokemonRiverpod extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(home: SplashScreen());
+    return const MaterialApp(home: AllPokemonScreen());
   }
 }
 
