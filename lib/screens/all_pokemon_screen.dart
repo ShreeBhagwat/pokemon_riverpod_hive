@@ -16,7 +16,14 @@ class AllPokemonScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.favorite))
+          IconButton(
+              onPressed: () {
+                context.showCustomSnackbar(
+                    title: 'Error',
+                    message: 'Error Fetching Pokemon',
+                    messageType: MessageType.error);
+              },
+              icon: const Icon(Icons.favorite))
         ],
       ),
       body: pokemonAsync.when(
