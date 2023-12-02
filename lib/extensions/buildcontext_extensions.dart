@@ -1,5 +1,7 @@
 import 'dart:developer';
+import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pokemon_riverpod/screens/all_pokemon_screen.dart';
 
@@ -78,6 +80,90 @@ extension BuildContextExtension on BuildContext {
         ),
       ),
     ));
+  }
+
+  void showCustomDialog({
+    required String title,
+    required String message,
+    required MessageType messageType,
+    bool isSingleButton = true,
+    String? button1Text = "OK",
+    String? button2Text = "Cancel",
+    VoidCallback? button1Pressed,
+    VoidCallback? button2Pressed,
+  }) {
+    showDialog(
+        barrierDismissible: false,
+        barrierColor: Colors.transparent,
+        context: this,
+        builder: (_) {
+          // return Dialog(
+          //   child:
+          //       Container(width: 200, height: 200, child: AllPokemonScreen()),
+          // );
+          return Platform.isIOS || Platform.isMacOS
+              ? CupertinoAlertDialog(
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(title),
+                      // IconButton(
+                      //     onPressed: () {
+                      //       Navigator.of(this).pop();
+                      //     },
+                      //     icon: const Icon(Icons.close))
+                    ],
+                  ),
+                  content: Text(message), // This takes any widget
+                  actions: [
+                    if (!isSingleButton)
+                      TextButton(
+                          onPressed: button2Pressed ??
+                              () {
+                                Navigator.of(this).pop();
+                              },
+                          child: Text(button2Text ?? "Cancel")),
+                    TextButton(
+                        onPressed: button1Pressed ??
+                            () {
+                              Navigator.of(this).pop();
+                            },
+                        child: Text(button1Text ?? "OK")),
+                  ],
+                )
+              : WillPopScope(
+                  onWillPop: () async => false,
+                  child: AlertDialog(
+                    title: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(title),
+                        // IconButton(
+                        //     onPressed: () {
+                        //       Navigator.of(this).pop();
+                        //     },
+                        //     icon: const Icon(Icons.close))
+                      ],
+                    ),
+                    content: Text(message), // This takes any widget
+                    actions: [
+                      if (!isSingleButton)
+                        TextButton(
+                            onPressed: button2Pressed ??
+                                () {
+                                  Navigator.of(this).pop();
+                                },
+                            child: Text(button2Text ?? "Cancel")),
+                      TextButton(
+                          onPressed: button1Pressed ??
+                              () {
+                                Navigator.of(this).pop();
+                              },
+                          child: Text(button1Text ?? "OK")),
+                    ],
+                  ),
+                );
+        });
   }
 }
 

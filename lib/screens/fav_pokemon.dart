@@ -9,21 +9,38 @@ class FavPokemonScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final pokemonNotifier = ref.watch(pokemonProvider);
     return Scaffold(
-        body: ListView.builder(
-            itemCount: pokemonNotifier.pokemonsFromDatabase.length,
-            itemBuilder: (context, index) {
-              final pokemon = pokemonNotifier.pokemonsFromDatabase[index];
-              return ListTile(
-                title: Text(pokemon.name.toString()),
-                leading: Image.network(pokemon.imageurl.toString()),
-                // trailing: IconButton(
-                //     onPressed: () {
-                //       ref
-                //           .read(pokemonProvider)
-                //           .deletePokemonFromDatabase(pokemon);
-                //     },
-                //     icon: const Icon(Icons.delete)),
-              );
-            }));
+        body: CustomScrollView(
+      slivers: [
+        SliverAppBar(
+          pinned: false,
+          floating: true,
+          expandedHeight: 200,
+          flexibleSpace: FlexibleSpaceBar(
+            collapseMode: CollapseMode.pin,
+            title: Text(
+              'Fav Pokemon',
+              style: TextStyle(color: Colors.black),
+            ),
+            background: Image.asset(
+              'images/pokeball_image.png',
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+        SliverList(
+          delegate: SliverChildBuilderDelegate((context, index) {
+            return ListTile(
+              title: Text(index.toString()),
+            );
+          }, childCount: 100),
+        ),
+        SliverToBoxAdapter(
+          child: IconButton(
+            onPressed: () {},
+            icon: Icon(Icons.add),
+          ),
+        )
+      ],
+    ));
   }
 }

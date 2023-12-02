@@ -5,6 +5,7 @@ import 'package:pokemon_riverpod/modal/pokemon.dart';
 import 'package:pokemon_riverpod/providers/pokemon_future_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:pokemon_riverpod/screens/detail_screen.dart';
+import 'package:pokemon_riverpod/screens/fav_pokemon.dart';
 import 'package:pokemon_riverpod/screens/splash_screen.dart';
 
 class AllPokemonScreen extends ConsumerWidget {
@@ -14,31 +15,45 @@ class AllPokemonScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final pokemonAsync = ref.watch(pokemonFutureProvider);
     return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(
-              onPressed: () {
-                context.showCustomSnackbar(
-                    title: 'Error',
-                    message: 'Error Fetching Pokemon',
-                    messageType: MessageType.error);
-              },
-              icon: const Icon(Icons.favorite))
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            pinned: false,
+            floating: true,
+            expandedHeight: 200,
+            flexibleSpace: FlexibleSpaceBar(
+              collapseMode: CollapseMode.pin,
+              title: Text(
+                'Fav Pokemon',
+                style: TextStyle(color: Colors.black),
+              ),
+              background: Image.asset(
+                'images/pokeball_image.png',
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          pokemonAsync.when(
+              data: (pokemonList) => SliverPadding(
+                    padding: const EdgeInsets.only(top: 10),
+                    sliver: PokemonGrideView(
+                      pokemonList: pokemonList,
+                    ),
+                  ),
+              error: ((error, stackTrace) {
+                return SliverToBoxAdapter(
+                  child: Center(
+                    child: Text(
+                      error.toString(),
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
+                  ),
+                );
+              }),
+              loading: () => SliverToBoxAdapter(
+                  child: Container(child: Text('Loading...')))),
         ],
       ),
-      body: pokemonAsync.when(
-          data: (pokemonList) => PokemonGrideView(
-                pokemonList: pokemonList,
-              ),
-          error: ((error, stackTrace) {
-            return Center(
-              child: Text(
-                error.toString(),
-                style: Theme.of(context).textTheme.headline6,
-              ),
-            );
-          }),
-          loading: () => const SplashScreen()),
     );
   }
 }
@@ -49,7 +64,7 @@ class PokemonGrideView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
+    return SliverGrid.builder(
         itemCount: pokemonList.length,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2, mainAxisSpacing: 4, crossAxisSpacing: 4),
