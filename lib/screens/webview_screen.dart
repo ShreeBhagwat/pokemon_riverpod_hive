@@ -41,9 +41,7 @@ class _WebviewScreenState extends State<WebviewScreen> {
             onWebResourceError: (error) {
               log(error.description);
             },
-            onUrlChange: (value) {
-              
-            },
+            onUrlChange: (value) {},
             onNavigationRequest: (request) {
               log(request.url.toString());
 
@@ -56,7 +54,10 @@ class _WebviewScreenState extends State<WebviewScreen> {
               }
             }),
       )
-      ..loadRequest(Uri.parse(widget.url));
+      ..loadRequest(Uri.parse(widget.url), headers: {
+        'User-Agent':
+            'Mozilla/5.0 (Linux; Android 10; SM-G975F) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.82 Mobile Safari/537.36'
+      });
   }
 
   @override
